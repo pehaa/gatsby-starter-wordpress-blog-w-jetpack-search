@@ -7,3 +7,28 @@ import "./src/css/normalize.css"
 
 // custom CSS styles
 import "./src/css/style.css"
+import fetch from "isomorphic-fetch"
+import React from "react"
+import { ApolloClient, InMemoryCache, ApolloProvider } from "@apollo/client"
+import { relayStylePagination } from "@apollo/client/utilities"
+
+const cache = new InMemoryCache({
+  typePolicies: {
+    Query: {
+      fields: {
+        posts: relayStylePagination(["where"]),
+      },
+    },
+  },
+})
+
+const client = new ApolloClient({
+  /* Set the endpoint for your GraphQL server */
+  uri: "http://wp-w-graphql.test/graphql",
+  cache,
+  fetch,
+})
+
+export const wrapRootElement = ({ element }) => (
+  <ApolloProvider client={client}>{element}</ApolloProvider>
+)
