@@ -2,8 +2,8 @@ import React from "react"
 import { Link } from "gatsby"
 import { useQuery, gql } from "@apollo/client"
 const GET_RESULTS = gql`
-  query($search: String, $after: String) {
-    posts(first: 10, after: $after, where: { search: $search }) {
+  query($in: [ID], $after: String) {
+    posts($after: $after, where: { in: $in}) {
       edges {
         node {
           id
@@ -13,27 +13,27 @@ const GET_RESULTS = gql`
         }
       }
       pageInfo {
-        hasNextPage
         endCursor
-        startCursor
       }
     }
   }
 `
 
-const SearchResults = ({ query }) => {
+const SearchResults = ({ query, ids, total, pageHandle }) => {
+  console.log(ids, query, total)
   const { data, loading, error, fetchMore } = useQuery(GET_RESULTS, {
-    variables: { search: query, after: "" },
+    variables: { in: ids },
   })
   console.log("data", data, loading, error)
   if (loading) return <p>Searching posts...</p>
   if (error) return <p>Error - {error.message}</p>
   const loadMore = () => {
-    if (data.posts.pageInfo.hasNextPage) {
-      console.log("will fetch More", data.posts.pageInfo.endCursor, query)
+    if (pageHandle) {
+      console.log("will fetch More", query)
       fetchMore({
         variables: {
-          after: data.posts.pageInfo.endCursor,
+          in: ids,
+          after: pageHandle,
         },
       })
     }
@@ -41,7 +41,7 @@ const SearchResults = ({ query }) => {
   console.log("data", data, loading, error)
   return (
     <section>
-      <h2>Found {data.posts.edges.length} results:</h2>
+      <h2>Found {total} results:</h2>
       <ul>
         {data.posts.edges.map(el => {
           return (
@@ -52,9 +52,9 @@ const SearchResults = ({ query }) => {
         })}
       </ul>
 
-      {data.posts.pageInfo.hasNextPage && (
+      {pageHandle && (
         <button type="button" onClick={loadMore}>
-          Load More {data.posts.pageInfo.endCursor}
+          Load More
         </button>
       )}
     </section>
