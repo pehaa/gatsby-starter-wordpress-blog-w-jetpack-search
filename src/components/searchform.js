@@ -5,9 +5,12 @@ const SearchForm = ({ setData, currentPageHandle }) => {
   const [sort, setSort] = useState("score_default")
   useEffect(() => {
     if (query) {
-      fetch(
-        `https://public-api.wordpress.com/rest/v1.3/sites/194959051/search?query=${query}&sort=${sort}&size=10`
-      )
+      const pageHandleQuery = currentPageHandle
+        ? `&page_handle=${currentPageHandle}`
+        : ""
+      const queryString = `https://public-api.wordpress.com/rest/v1.3/sites/194959051/search?query=${query}&sort=${sort}&size=10${pageHandleQuery}`
+      console.log(queryString)
+      fetch(queryString)
         .then(r => r.json())
         .then(data => {
           console.log(data)
@@ -18,7 +21,7 @@ const SearchForm = ({ setData, currentPageHandle }) => {
             return {
               query,
               total,
-              ids: [...currentIds, ...results.map(el => el.fields.post_id)],
+              ids: results.map(el => el.fields.post_id),
               pageHandle: page_handle,
             }
           })

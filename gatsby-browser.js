@@ -16,7 +16,14 @@ const cache = new InMemoryCache({
   typePolicies: {
     Query: {
       fields: {
-        posts: relayStylePagination(["where"]),
+        posts: {
+          // Don't cache separate results based on
+          // any of this field's arguments.
+          //keyArgs: false,
+          // Concatenate the incoming list items with
+          // the existing list items.
+          keyArgs: ["where"],
+        },
       },
     },
   },
