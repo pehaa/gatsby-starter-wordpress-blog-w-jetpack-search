@@ -1,40 +1,49 @@
 import { useEffect, useState } from "react"
-import { gql, useLazyQuery } from "@apollo/client"
-const GET_RESULTS = gql`
-  query($in: [ID]) {
-    posts(where: { in: $in }) {
-      edges {
-        node {
+import { useStaticQuery, graphql } from "gatsby"
+const baseServiceUrl =
+  "https://public-api.wordpress.com/rest/v1.3/sites/194959051/search?filter[bool][must][0][bool][must_not][0][term][post_type]=page"
+export const useES = ({ query, sort }) => {
+  const {
+    allWpPost: { nodes },
+  } = useStaticQuery(graphql`
+    query AllPostsQuery {
+      allWpPost {
+        nodes {
+          title
           databaseId
           id
           slug
-          title
-          excerpt
         }
       }
     }
-  }
-`
-export const useES = ({ query, sort }) => {
+  `)
   const [allResults, setAllResults] = useState([])
   const [pageHandle, setPageHandle] = useState(null)
-  const [load, result] = useLazyQuery(GET_RESULTS)
   const next = () => {
     if (pageHandle) {
-      const queryString = `https://public-api.wordpress.com/rest/v1.3/sites/194959051/search?query=${query}&sort=${sort}&size=3&page_handle=${pageHandle}`
+      const queryString = `${baseServiceUrl}&query=${query}&sort=${sort}&size=3&page_handle=${pageHandle}`
       fetch(queryString)
         .then(r => r.json())
         .then(data => {
           console.log(data)
           const { total, page_handle, results } = data
           setPageHandle(page_handle)
-          load({ variables: { in: results.map(el => el.fields.post_id) } })
+          const ids = results.map(el => el.fields.post_id)
+          if (ids.length) {
+            setAllResults(s => {
+              return [
+                ...s,
+                ...ids.map(el => {
+                  return nodes.find(item => item.databaseId === el)
+                }),
+              ]
+            })
+          }
         })
     }
   }
   useEffect(() => {
-    setAllResults([])
-    const queryString = `https://public-api.wordpress.com/rest/v1.3/sites/194959051/search?query=${query}&sort=${sort}&size=3`
+    const queryString = `${baseServiceUrl}&query=${query}&sort=${sort}&size=3`
     console.log(queryString)
     fetch(queryString)
       .then(r => r.json())
@@ -42,14 +51,15 @@ export const useES = ({ query, sort }) => {
         console.log(data)
         const { total, page_handle, results } = data
         setPageHandle(page_handle)
-        load({ variables: { in: results.map(el => el.fields.post_id) } })
+        const ids = results.map(el => el.fields.post_id)
+        if (ids.length) {
+          setAllResults(
+            ids.map(el => {
+              return nodes.find(item => item.databaseId === el)
+            })
+          )
+        }
       })
-  }, [query, sort, load])
-  useEffect(() => {
-    console.log("useEffect", result.data)
-    if (result.data) {
-      setAllResults(s => [...s, ...result.data.posts.edges])
-    }
-  }, [result.data])
-  return { result, allResults, next, hasNext: !!pageHandle }
+  }, [query, sort, nodes])
+  return { allResults, next, hasNext: !!pageHandle }
 }
