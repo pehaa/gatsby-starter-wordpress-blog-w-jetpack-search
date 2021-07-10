@@ -7,19 +7,11 @@ import "./src/css/normalize.css"
 
 // custom CSS styles
 import "./src/css/style.css"
-import fetch from "isomorphic-fetch"
 import React from "react"
-import { ApolloClient, InMemoryCache, ApolloProvider } from "@apollo/client"
+import SearchWrapper from "./src/components/searchwrapper"
 
-const cache = new InMemoryCache()
-
-const client = new ApolloClient({
-  /* Set the endpoint for your GraphQL server */
-  uri: "https://pehaa.xyz/five-boots/graphql",
-  cache,
-  fetch,
-})
-
-export const wrapRootElement = ({ element }) => (
-  <ApolloProvider client={client}>{element}</ApolloProvider>
-)
+export const wrapPageElement = ({ element, props }) => {
+  // props provide same data to Layout as Page element will get
+  // including location, data, etc - you don't need to pass it
+  return <SearchWrapper {...props}>{element}</SearchWrapper>
+}

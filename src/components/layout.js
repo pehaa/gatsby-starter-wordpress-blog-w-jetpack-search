@@ -1,7 +1,6 @@
 import React from "react"
 import { Link, useStaticQuery, graphql } from "gatsby"
 import parse from "html-react-parser"
-import Search from "./search"
 
 const Layout = ({ isHomePage, children }) => {
   const {
@@ -32,7 +31,6 @@ const Layout = ({ isHomePage, children }) => {
           </Link>
         )}
       </header>
-      <Search />
       <main>{children}</main>
 
       <footer>
