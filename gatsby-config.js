@@ -26,10 +26,9 @@ module.exports = {
       resolve: `gatsby-source-wordpress`,
       options: {
         // the only required plugin option for WordPress is the GraphQL url.
-        url: `http://wp-w-graphql.test/graphql`,
+        url: `https://pehaa.xyz/five-boots/graphql`,
         schema: {
           timeout: 100000,
-          parPage: 10,
         },
       },
     },

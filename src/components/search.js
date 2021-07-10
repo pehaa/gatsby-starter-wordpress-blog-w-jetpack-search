@@ -3,15 +3,13 @@ import SearchForm from "./searchform"
 import SearchResults from "./searchResults"
 
 const Search = () => {
-  const [data, setData] = useState({})
-  const [currentPageHandle, setCurrentPageHandle] = useState("")
+  const [query, setQuery] = useState("")
+  const [sort, setSort] = useState("score_default")
   return (
     <section>
+      <SearchForm setQuery={setQuery} setSort={setSort} />
       Hey!!
-      <SearchForm setData={setData} currentPageHandle={currentPageHandle} />
-      {data.query && (
-        <SearchResults {...data} setCurrentPageHandle={setCurrentPageHandle} />
-      )}
+      {query && <SearchResults query={query} sort={sort} />}
     </section>
   )
 }
