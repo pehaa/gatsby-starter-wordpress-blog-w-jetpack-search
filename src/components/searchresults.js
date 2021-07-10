@@ -1,8 +1,9 @@
+import { Link } from "gatsby"
 import React from "react"
 import { useES } from "./search/useES"
 
 const SearchResults = ({ query, sort }) => {
-  const { allResults, next, hasNext } = useES({ query, sort })
+  const { allResults, next, hasNext } = useES({ query: query.trim(), sort })
   if (!allResults.length) return <p>Searching posts...</p>
   return (
     !!allResults.length && (
@@ -12,8 +13,11 @@ const SearchResults = ({ query, sort }) => {
           {allResults.map((el, index) => {
             // fix it!!!
             return (
-              <li key={index}>
-                {el.databaseId} {el.title}
+              <li key={el.id}>
+                <Link
+                  to={el.uri}
+                  dangerouslySetInnerHTML={{ __html: el.title }}
+                />
               </li>
             )
           })}

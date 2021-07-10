@@ -7,7 +7,12 @@ const Search = () => {
   const [sort, setSort] = useState("score_default")
   return (
     <section>
-      <SearchForm setQuery={setQuery} setSort={setSort} />
+      <SearchForm
+        query={query}
+        sort={sort}
+        setQuery={setQuery}
+        setSort={setSort}
+      />
       Hey!!
       {query && <SearchResults query={query} sort={sort} />}
     </section>

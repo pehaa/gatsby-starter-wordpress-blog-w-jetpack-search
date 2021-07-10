@@ -1,36 +1,56 @@
 import React from "react"
 
-const SearchForm = ({ setQuery, setSort }) => {
-  const handleSubmit = e => {
-    e.preventDefault()
-    setQuery(e.target.elements.search.value)
-    setSort(e.target.elements.sort.value)
-    //e.target.elements.sort.value
-  }
-
+const SearchForm = ({ query, sort, setQuery, setSort }) => {
   return (
-    <form role="search" onSubmit={handleSubmit}>
+    <form role="search" autoComplete="off">
       <div>
         <label>
           <input
             type="radio"
             value="score_default"
-            defaultChecked
+            checked={sort === "score_default"}
+            onChange={e => {
+              setSort(e.target.value)
+            }}
             name="sort"
           />{" "}
           SCORE
         </label>
         <label>
-          <input type="radio" value="date_asc" name="sort" /> NEWEST
+          <input
+            type="radio"
+            value="date_asc"
+            checked={sort === "date_asc"}
+            onChange={e => {
+              setSort(e.target.value)
+            }}
+            name="sort"
+          />{" "}
+          NEWEST
         </label>
         <label>
-          <input type="radio" value="date_desc" name="sort" /> OLDEST
+          <input
+            type="radio"
+            value="date_desc"
+            name="sort"
+            checked={sort === "date_desc"}
+            onChange={e => {
+              setSort(e.target.value)
+            }}
+          />{" "}
+          OLDEST
         </label>
       </div>
       <label htmlFor="search-input" style={{ display: "block" }}>
         Search me:
       </label>
-      <input id="search" type="search" placeholder="e.g. template" />
+      <input
+        id="search"
+        type="search"
+        placeholder="e.g. template"
+        value={query}
+        onChange={e => setQuery(e.target.value)}
+      />
       <button type="submit">Search</button>
     </form>
   )
