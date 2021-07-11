@@ -14,7 +14,7 @@ const Search = () => {
         setSort={setSort}
       />
       Hey!!
-      {query && <SearchResults query={query} sort={sort} />}
+      {query.length > 1 && <SearchResults query={query} sort={sort} />}
     </section>
   )
 }

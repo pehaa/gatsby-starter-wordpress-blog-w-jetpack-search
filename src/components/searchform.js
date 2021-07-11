@@ -2,7 +2,7 @@ import React from "react"
 
 const SearchForm = ({ query, sort, setQuery, setSort }) => {
   return (
-    <form role="search" autoComplete="off">
+    <form role="search" autoComplete="off" onSubmit={e => e.preventDefault()}>
       <div>
         <label>
           <input

@@ -3,12 +3,16 @@ import React from "react"
 import { useES } from "./search/useES"
 
 const SearchResults = ({ query, sort }) => {
-  const { allResults, next, hasNext } = useES({ query: query.trim(), sort })
+  const { allResults, next, hasNext, total, correctedQuery } = useES({
+    query: query.trim(),
+    sort,
+  })
   if (!allResults.length) return <p>Searching posts...</p>
   return (
     !!allResults.length && (
       <section>
-        <h2>Found results:</h2>
+        <h2>Found results {total}:</h2>
+        <p>for {correctedQuery || query}</p>
         <ul>
           {allResults.map((el, index) => {
             // fix it!!!
@@ -16,7 +20,14 @@ const SearchResults = ({ query, sort }) => {
               <li key={el.id}>
                 <Link
                   to={el.uri}
-                  dangerouslySetInnerHTML={{ __html: el.title }}
+                  dangerouslySetInnerHTML={{
+                    __html: el.highlight.title[0] || el.title,
+                  }}
+                />
+                <div
+                  dangerouslySetInnerHTML={{
+                    __html: el.highlight.content[0] || el.excerpt,
+                  }}
                 />
               </li>
             )
