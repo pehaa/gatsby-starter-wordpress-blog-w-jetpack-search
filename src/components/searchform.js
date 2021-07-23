@@ -1,17 +1,41 @@
 import React from "react"
 
-const SearchForm = ({ query, sort, setQuery, setSort }) => {
+const SearchForm = ({ data, searchTerm, sort, setParams }) => {
+  const handleRadioChange = e => {
+    if (
+      data.result.page_handle === false &&
+      ((e.target.value === "score_default" && data.result.results[0]?._score) ||
+        e.target.value !== "score_default")
+    ) {
+      setParams({
+        type: "shuffle",
+        payload: { sort: e.target.value },
+      })
+    } else {
+      setParams({
+        payload: { sort: e.target.value },
+      })
+    }
+  }
   return (
     <form role="search" autoComplete="off" onSubmit={e => e.preventDefault()}>
+      <label htmlFor="search-input" style={{ display: "block" }}>
+        Search me:
+      </label>
+      <input
+        id="search"
+        type="search"
+        value={searchTerm}
+        onChange={e => setParams({ payload: { searchTerm: e.target.value } })}
+        placeholder="Search..."
+      />
       <div>
         <label>
           <input
             type="radio"
             value="score_default"
             checked={sort === "score_default"}
-            onChange={e => {
-              setSort(e.target.value)
-            }}
+            onChange={handleRadioChange}
             name="sort"
           />{" "}
           SCORE
@@ -21,9 +45,7 @@ const SearchForm = ({ query, sort, setQuery, setSort }) => {
             type="radio"
             value="date_asc"
             checked={sort === "date_asc"}
-            onChange={e => {
-              setSort(e.target.value)
-            }}
+            onChange={handleRadioChange}
             name="sort"
           />{" "}
           NEWEST
@@ -34,24 +56,11 @@ const SearchForm = ({ query, sort, setQuery, setSort }) => {
             value="date_desc"
             name="sort"
             checked={sort === "date_desc"}
-            onChange={e => {
-              setSort(e.target.value)
-            }}
+            onChange={handleRadioChange}
           />{" "}
           OLDEST
         </label>
       </div>
-      <label htmlFor="search-input" style={{ display: "block" }}>
-        Search me:
-      </label>
-      <input
-        id="search"
-        type="search"
-        placeholder="e.g. template"
-        value={query}
-        onChange={e => setQuery(e.target.value)}
-      />
-      <button type="submit">Search</button>
     </form>
   )
 }

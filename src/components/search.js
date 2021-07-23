@@ -1,21 +1,44 @@
 import React, { useState } from "react"
 import SearchForm from "./searchform"
-import SearchResults from "./searchResults"
+import SearchResults from "./search-results"
+import "../css/search.css"
+import { useES } from "./search/useES"
 
 const Search = () => {
-  const [query, setQuery] = useState("")
-  const [sort, setSort] = useState("score_default")
+  const { params, setParams, searchResults } = useES()
+  const [visible, setVisible] = useState(false)
   return (
-    <section>
-      <SearchForm
-        query={query}
-        sort={sort}
-        setQuery={setQuery}
-        setSort={setSort}
-      />
-      Hey!!
-      {query.length > 1 && <SearchResults query={query} sort={sort} />}
-    </section>
+    <>
+      <button
+        type="button"
+        className="open-search-button"
+        onClick={() => setVisible(true)}
+      >
+        Search{" "}
+        <span role="img" aria-label="magnifying glass">
+          🔎
+        </span>
+      </button>
+      {visible && (
+        <section className="search-wrapper">
+          <SearchForm data={searchResults} {...params} setParams={setParams} />
+          {
+            <SearchResults
+              {...params}
+              data={searchResults}
+              setParams={setParams}
+            />
+          }
+          <button
+            type="button"
+            className="close-button"
+            onClick={() => setVisible(false)}
+          >
+            Close
+          </button>
+        </section>
+      )}
+    </>
   )
 }
 
