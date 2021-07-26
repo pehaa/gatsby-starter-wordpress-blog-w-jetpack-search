@@ -1,17 +1,17 @@
 import React, { useState } from "react"
-import SearchForm from "./searchform"
+import SearchForm from "./search-form"
 import SearchResults from "./search-results"
 import "../css/search.css"
-import { useES } from "./search/useES"
+import { useJetpackSearch } from "./search/useES"
 
 const Search = () => {
-  const { params, setParams, searchResults } = useES()
   const [visible, setVisible] = useState(false)
+  const { params, setParams, searchResults } = useJetpackSearch()
   return (
     <>
       <button
         type="button"
-        className="open-search-button"
+        className="search-open-button"
         onClick={() => setVisible(true)}
       >
         Search{" "}
@@ -20,18 +20,16 @@ const Search = () => {
         </span>
       </button>
       {visible && (
-        <section className="search-wrapper">
+        <section className="search-container">
           <SearchForm data={searchResults} {...params} setParams={setParams} />
-          {
-            <SearchResults
-              {...params}
-              data={searchResults}
-              setParams={setParams}
-            />
-          }
+          <SearchResults
+            {...params}
+            searchResults={searchResults}
+            setParams={setParams}
+          />
           <button
             type="button"
-            className="close-button"
+            className="search-close-button"
             onClick={() => setVisible(false)}
           >
             Close

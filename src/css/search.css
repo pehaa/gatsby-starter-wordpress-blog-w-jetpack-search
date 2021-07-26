@@ -1,65 +1,70 @@
-.search-wrapper,
-.open-search-button {
+.search-container,
+.search-open-button {
   position: fixed;
   top: 0;
   background-color: #f0f0f0;
 }
-.search-wrapper {
+.search-container {
   right: 0;
   z-index: 100;
-  padding: 0.5rem 0.5rem 1.5rem 1rem;
+  padding: 0.5rem 0.5rem 0.5rem 1rem;
   width: min(65%, 24rem);
 }
-.open-search-button {
+.search-open-button {
   color: inherit;
   z-index: 99;
   right: 1rem;
 }
-.search-wrapper .loading {
+.search-container .loading {
   margin-top: 1rem;
   font-style: italic;
 }
-.search-wrapper a[aria-current] {
+.search-container a[aria-current] {
   text-decoration: none;
   font-weight: bold;
   display: block;
   padding-top: 0.75rem;
 }
-.search-wrapper a[aria-current],
-.search-wrapper [aria-current] + * {
+.search-container a[aria-current],
+.search-container [aria-current] + * {
   color: black;
   padding-left: 0.75rem;
   padding-right: 0.75rem;
   background: #dbdbdb;
 }
-.search-wrapper [aria-current] + * {
+.search-container [aria-current] + * {
   padding-bottom: 0.75rem;
 }
-.search-wrapper form {
+.search-container form {
   margin-right: 0.5rem;
 }
-.open-search-button,
-.search-wrapper button {
+.search-open-button,
+.search-container button {
   -webkit-appearance: none;
   font: inherit;
   font-family: Montserrat;
   border: none;
-  background: var(--color-primary);
-  color: white;
   padding: 0.25rem 0.75rem;
   cursor: pointer;
   border-radius: 3px;
 }
-
-.search-wrapper button[type="submit"] {
+.search-container button[type="submit"],
+.search-results button {
+  background: var(--color-primary);
+  color: white;
+}
+.search-results button {
+  margin-bottom: 0.5rem;
+}
+.search-container button[type="submit"] {
   position: absolute;
   right: 0;
   padding: 0.5rem;
 }
-.search-wrapper .close-button {
+.search-close-button {
   position: absolute;
-  top: 0.5rem;
-  right: 1.5rem;
+  top: 0.25rem;
+  right: 0.5rem;
   padding: 0;
   background: transparent;
   text-decoration: underline;
@@ -73,57 +78,61 @@
   outline-offset: -6px;
   margin-top: 0.5rem;
   overflow-y: auto;
-  max-height: calc(100vh - 8rem);
+  max-height: calc(100vh - 10rem);
 }
-.search-wrapper ul {
+.search-results ul {
   list-style: none;
   margin: 0 1rem 0 0;
 }
-.search-wrapper li {
+.search-results li {
   margin: 0 0 0.5rem;
 }
-.search-wrapper .post-excerpt,
-.search-wrapper .post-excerpt * {
+.search-results .post-excerpt,
+.search-results .post-excerpt * {
   font-size: 0.8125rem;
 }
-.search-wrapper h2 {
+.search-results .info {
   position: sticky;
   top: 0rem;
   padding: 0.5rem 0;
   background: linear-gradient(to bottom, #f0f0f0 40%, transparent);
 }
-.search-wrapper h2,
-.search-wrapper p {
+.search-results .loading {
+  font-style: italic;
+}
+.search-results .results {
+  font-weight: bold;
+}
+.search-results h2,
+.search-results p {
   font-size: 1rem;
   margin: 0;
 }
-.search-wrapper a {
+.search-results a {
   display: block;
   text-overflow: ellipsis;
   overflow: hidden;
   white-space: nowrap;
 }
 
-.search-wrapper input[type="search"] {
+.search-container [type="search"] {
   -webkit-appearance: none;
   width: 100%;
   padding: 0.5rem;
+  margin-bottom: 0.5rem;
   border-radius: 3px;
   border: none;
   box-shadow: none;
   font: inherit;
 }
 
-[role="search"] {
-  position: relative;
-}
-
-.search-wrapper label {
+.search-container label {
   font-family: Montserrat;
   margin-bottom: 0.5rem;
+  margin-right: 1rem;
   font-weight: bold;
 }
-.search-wrapper ::-webkit-search-cancel-button {
+.search-container ::-webkit-search-cancel-button {
   /* Remove default */
   -webkit-appearance: none;
 }

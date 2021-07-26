@@ -8,7 +8,7 @@ import "./src/css/normalize.css"
 // custom CSS styles
 import "./src/css/style.css"
 import React from "react"
-import SearchWrapper from "./src/components/searchwrapper"
+import SearchWrapper from "./src/components/search-wrapper"
 
 export const wrapPageElement = ({ element, props }) => {
   // props provide same data to Layout as Page element will get

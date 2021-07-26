@@ -2,23 +2,29 @@ import React from "react"
 
 const SearchForm = ({ data, searchTerm, sort, setParams }) => {
   const handleRadioChange = e => {
+    console.log(
+      data.result.page_handle === false,
+      e.target.value === "score_default" && data.result.results[0]?._score,
+      e.target.value !== "score_default",
+      data.result.results
+    )
     if (
       data.result.page_handle === false &&
       ((e.target.value === "score_default" && data.result.results[0]?._score) ||
         e.target.value !== "score_default")
     ) {
       setParams({
-        type: "shuffle",
-        payload: { sort: e.target.value },
+        dontRefetch: true,
+        sort: e.target.value,
       })
     } else {
       setParams({
-        payload: { sort: e.target.value },
+        sort: e.target.value,
       })
     }
   }
   return (
-    <form role="search" autoComplete="off" onSubmit={e => e.preventDefault()}>
+    <>
       <label htmlFor="search-input" style={{ display: "block" }}>
         Search me:
       </label>
@@ -26,8 +32,9 @@ const SearchForm = ({ data, searchTerm, sort, setParams }) => {
         id="search"
         type="search"
         value={searchTerm}
-        onChange={e => setParams({ payload: { searchTerm: e.target.value } })}
+        onChange={e => setParams({ searchTerm: e.target.value })}
         placeholder="Search..."
+        autoFocus
       />
       <div>
         <label>
@@ -61,7 +68,7 @@ const SearchForm = ({ data, searchTerm, sort, setParams }) => {
           OLDEST
         </label>
       </div>
-    </form>
+    </>
   )
 }
 export default SearchForm

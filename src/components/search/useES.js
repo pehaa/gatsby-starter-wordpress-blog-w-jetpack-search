@@ -3,10 +3,9 @@ import { useStaticQuery, graphql } from "gatsby"
 import useConstant from "use-constant"
 import AwesomeDebouncePromise from "awesome-debounce-promise"
 import { useAsyncAbortable } from "react-async-hook"
-import { result } from "lodash"
 
 const baseServiceUrl =
-  "https://public-api.wordpress.com/rest/v1.3/sites/194959051/search?filter[bool][must][0][bool][must_not][0][term][post_type]=page&size=3&highlight_fields[0]=title&highlight_fields[1]=content"
+  "https://public-api.wordpress.com/rest/v1.3/sites/194959051/search?filter[bool][must_not][term][post_type]=page&size=3&highlight_fields[0]=title&highlight_fields[1]=content"
 
 const searchFunction = async (
   { searchTerm, sort, pageHandle, dontRefetch },
@@ -17,8 +16,13 @@ const searchFunction = async (
       shuffle: sort,
     }
   }
-  const page_handle_query = pageHandle ? `&page_handle=${pageHandle}` : ""
-  const url = `${baseServiceUrl}&query=${searchTerm}&sort=${sort}${page_handle_query}`
+
+  const url = new URL(baseServiceUrl)
+  url.searchParams.set("query", searchTerm)
+  url.searchParams.set("sort", sort)
+  if (pageHandle) {
+    url.searchParams.set("page_handle", pageHandle)
+  }
 
   const result = await fetch(url, {
     signal: abortSignal,
@@ -28,7 +32,7 @@ const searchFunction = async (
   }
   const json = await result.json()
   console.log("🐙🐙🐙🐙🐙returned json", searchTerm, json)
-  return { ...json, fromMore: !!pageHandle }
+  return { ...json, isPaginatedResult: !!pageHandle }
 }
 
 const sortFunction = shuffle => {
@@ -51,26 +55,11 @@ const sortFunction = shuffle => {
 }
 
 const reducer = (state, action) => {
-  switch (action.type) {
-    case "more":
-      return {
-        ...state,
-        ...action.payload,
-        dontRefetch: false,
-      }
-    case "shuffle":
-      return {
-        ...state,
-        ...action.payload,
-        dontRefetch: true,
-      }
-    default:
-      return {
-        ...state,
-        ...action.payload,
-        pageHandle: "",
-        dontRefetch: false,
-      }
+  return {
+    ...state,
+    ...action,
+    pageHandle: action.pageHandle || "",
+    dontRefetch: action.dontRefetch || false,
   }
 }
 // Generic reusable hook
@@ -90,9 +79,8 @@ const useDebouncedSearch = searchFunction => {
   // fire a new request on each keystroke
   const searchResults = useAsyncAbortable(
     async abortSignal => {
-      console.log("useAsync pageHandle", params.pageHandle)
-      if (params.searchTerm.length < 2) {
-        return []
+      if (!params.searchTerm) {
+        return { results: [] }
       }
       if (params.pageHandle) {
         return searchFunction(params, abortSignal)
@@ -104,20 +92,9 @@ const useDebouncedSearch = searchFunction => {
     {
       setLoading: state => ({ ...state, loading: true }),
       setResult: (result, state) => {
-        console.log("result", result)
-        console.log("state", state)
-        const oldResults = state.result?.results || []
-        const newResults = result?.results || []
         if (result?.shuffle) {
-          console.log(
-            "heeere 💎",
-            state.result.results
-              .sort(() => sortFunction(result.shuffle))
-              .map(el => el.fields["title.default"])
-          )
           return {
             ...state,
-            status: "success",
             loading: false,
             error: undefined,
             result: {
@@ -131,10 +108,10 @@ const useDebouncedSearch = searchFunction => {
           status: "success",
           loading: false,
           error: undefined,
-          result: result?.fromMore
+          result: result?.isPaginatedResult
             ? {
                 ...result,
-                results: [...oldResults, ...newResults],
+                results: [...state.result?.results, ...result?.results],
               }
             : result,
         }
@@ -150,17 +127,17 @@ const useDebouncedSearch = searchFunction => {
   }
 }
 
-export const useES = () => {
+export const useJetpackSearch = () => {
   const {
     allWpPost: { nodes },
   } = useStaticQuery(graphql`
-    query AllPostsQuery1 {
+    query AllPostsQuery {
       allWpPost {
         nodes {
-          title
-          databaseId
           id
+          databaseId
           uri
+          title
           excerpt
         }
       }
@@ -169,6 +146,7 @@ export const useES = () => {
   const { params, setParams, searchResults } = useDebouncedSearch(
     searchFunction
   )
+  console.log(searchResults)
   return {
     params,
     setParams,
@@ -176,110 +154,16 @@ export const useES = () => {
       ...searchResults,
       result: {
         ...searchResults.result,
-        results: searchResults.result?.results?.map(el => {
+        results: searchResults.result?.results.map(el => {
           return {
-            ...nodes.find(item => item.databaseId === el.fields.post_id),
+            ...nodes.find(item => {
+              return item.databaseId === el.fields.post_id
+            }),
             highlight: el.highlight,
+            _score: el._score,
           }
         }),
       },
     },
   }
 }
-
-/*
-function App() {
-  const { params, setParams, searchResults } = useDebouncedSearch(
-    esSearchFunction
-  )
-
-  const { searchTerm, sort, pageHandle } = params
-  const handleRadioChange = e => {
-    console.log(searchResults.result)
-    if (
-      searchResults.result.page_handle === false &&
-      ((e.target.value === "score_default" &&
-        searchResults.result.results[0]?._score) ||
-        e.target.value !== "score_default")
-    ) {
-      setParams({
-        type: "shuffle",
-        payload: { sort: e.target.value },
-      })
-    } else {
-      setParams({
-        payload: { sort: e.target.value },
-      })
-    }
-  }
-  return (
-    <section>
-      <input
-        value={searchTerm}
-        onChange={e => setParams({ payload: { searchTerm: e.target.value } })}
-      />
-      <div>
-        <label>
-          <input
-            type="radio"
-            value="score_default"
-            checked={sort === "score_default"}
-            onChange={handleRadioChange}
-            name="sort"
-          />{" "}
-          SCORE
-        </label>
-        <label>
-          <input
-            type="radio"
-            value="date_asc"
-            checked={sort === "date_asc"}
-            onChange={handleRadioChange}
-            name="sort"
-          />{" "}
-          NEWEST
-        </label>
-        <label>
-          <input
-            type="radio"
-            value="date_desc"
-            name="sort"
-            checked={sort === "date_desc"}
-            onChange={handleRadioChange}
-          />{" "}
-          OLDEST
-        </label>
-      </div>
-      <p>
-        Found {searchResults.result?.total} results for{" "}
-        {searchResults.result?.corrected_query ? (
-          <>
-            <del>{searchTerm}</del>{" "}
-            <span>{searchResults.result?.corrected_query}</span>
-          </>
-        ) : (
-          <span>{searchTerm}</span>
-        )}
-      </p>
-      {searchResults.loading && !pageHandle && <p>Loading</p>}
-      {searchResults.result?.results?.map(el => (
-        <p key={el.fields.post_id}>{el.fields["title.default"]}</p>
-      ))}
-      {searchResults.loading && !!pageHandle && <p>Loading</p>}
-      {searchResults.result?.page_handle && (
-        <button
-          type="button"
-          onClick={() =>
-            setParams({
-              type: "more",
-              payload: { pageHandle: searchResults.result.page_handle },
-            })
-          }
-        >
-          load more
-        </button>
-      )}
-    </section>
-  )
-}
-*/
