@@ -1,8 +1,8 @@
-import { useReducer } from "react"
+import { useReducer, useEffect, useState } from "react"
 import { useStaticQuery, graphql } from "gatsby"
 import useConstant from "use-constant"
 import AwesomeDebouncePromise from "awesome-debounce-promise"
-import { useAsyncAbortable } from "react-async-hook"
+//import { useAsyncAbortable } from "react-async-hook"
 
 const baseServiceUrl =
   "https://public-api.wordpress.com/rest/v1.3/sites/194959051/search?filter[bool][must_not][term][post_type]=page&size=3&highlight_fields[0]=title&highlight_fields[1]=content"
@@ -73,6 +73,13 @@ const useDebouncedSearch = searchFunction => {
   const debouncedSearchFunction = useConstant(() =>
     AwesomeDebouncePromise(searchFunction, 200)
   )
+
+  const useAsyncAbortable = (fn, deps) => {
+    const [state, useState] = useState({})
+    useEffect(() => {
+      fn()
+    }, deps)
+  }
 
   // The async callback is run each time the text changes,
   // but as the search function is debounced, it does not
