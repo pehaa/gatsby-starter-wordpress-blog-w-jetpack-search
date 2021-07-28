@@ -3,14 +3,14 @@ import React from "react"
 const SearchForm = ({ data, searchTerm, sort, setParams }) => {
   const handleRadioChange = e => {
     console.log(
-      data.result.page_handle === false,
-      e.target.value === "score_default" && data.result.results[0]?._score,
+      data.page_handle === false,
+      e.target.value === "score_default" && data.results[0]?._score,
       e.target.value !== "score_default",
-      data.result.results
+      data.results
     )
     if (
-      data.result.page_handle === false &&
-      ((e.target.value === "score_default" && data.result.results[0]?._score) ||
+      data.page_handle === false &&
+      ((e.target.value === "score_default" && data.results[0]?._score) ||
         e.target.value !== "score_default")
     ) {
       setParams({
@@ -35,6 +35,7 @@ const SearchForm = ({ data, searchTerm, sort, setParams }) => {
         onChange={e => setParams({ searchTerm: e.target.value })}
         placeholder="Search..."
         autoFocus
+        autoComplete="off"
       />
       <div>
         <label>

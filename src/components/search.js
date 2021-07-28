@@ -6,7 +6,7 @@ import { useJetpackSearch } from "./search/useES"
 
 const Search = () => {
   const [visible, setVisible] = useState(false)
-  const { params, setParams, searchResults } = useJetpackSearch()
+  const { params, setParams, loading, error, data } = useJetpackSearch()
   return (
     <>
       <button
@@ -21,10 +21,18 @@ const Search = () => {
       </button>
       {visible && (
         <section className="search-container">
-          <SearchForm data={searchResults} {...params} setParams={setParams} />
+          <SearchForm
+            loading={loading}
+            error={error}
+            data={data}
+            {...params}
+            setParams={setParams}
+          />
           <SearchResults
             {...params}
-            searchResults={searchResults}
+            loading={loading}
+            error={error}
+            data={data}
             setParams={setParams}
           />
           <button

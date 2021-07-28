@@ -2,8 +2,7 @@ import { Link } from "gatsby"
 import React, { Fragment } from "react"
 import parse from "html-react-parser"
 
-const SearchResults = ({ searchResults, searchTerm, setParams }) => {
-  const { result, error, loading } = searchResults
+const SearchResults = ({ data, error, loading, searchTerm, setParams }) => {
   if (error) {
     return <p>Error - {error.message}</p>
   }
@@ -14,13 +13,12 @@ const SearchResults = ({ searchResults, searchTerm, setParams }) => {
           <p className="info">Searching posts .....</p>
         ) : (
           <>
-            {result.total !== undefined && (
+            {data.total !== undefined && (
               <p className="info results">
-                Found {result.total} results for{" "}
-                {result.corrected_query ? (
+                Found {data.total} results for{" "}
+                {data.corrected_query ? (
                   <>
-                    <del>{searchTerm}</del>{" "}
-                    <span>{result?.corrected_query}</span>
+                    <del>{searchTerm}</del> <span>{data.corrected_query}</span>
                   </>
                 ) : (
                   <span>{searchTerm}</span>
@@ -29,9 +27,9 @@ const SearchResults = ({ searchResults, searchTerm, setParams }) => {
             )}
           </>
         )}
-        {result.results.length > 0 && (
+        {data.results?.length > 0 && (
           <ul>
-            {result.results.map(el => {
+            {data.results.map(el => {
               return (
                 <li key={el.id}>
                   <Link to={el.uri}>
@@ -55,12 +53,13 @@ const SearchResults = ({ searchResults, searchTerm, setParams }) => {
           </ul>
         )}
         {/*loading && <p>Searching posts...</p> */}
-        {result.page_handle && (
+        {data.page_handle && (
           <button
             type="button"
+            disabled={loading}
             onClick={() =>
               setParams({
-                pageHandle: result.page_handle,
+                pageHandle: data.page_handle,
               })
             }
           >

@@ -95,7 +95,7 @@
   position: sticky;
   top: 0rem;
   padding: 0.5rem 0;
-  background: linear-gradient(to bottom, #f0f0f0 40%, transparent);
+  background: linear-gradient(to bottom, #f0f0f0 40%, #f0f0f000);
 }
 .search-results .loading {
   font-style: italic;
