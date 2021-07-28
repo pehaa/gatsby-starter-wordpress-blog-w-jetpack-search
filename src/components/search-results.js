@@ -2,7 +2,8 @@ import { Link } from "gatsby"
 import React, { Fragment } from "react"
 import parse from "html-react-parser"
 
-const SearchResults = ({ data, error, loading, searchTerm, setParams }) => {
+const SearchResults = ({ searchResults, searchTerm, setParams }) => {
+  const { data, error, loading } = searchResults
   if (error) {
     return <p>Error - {error.message}</p>
   }

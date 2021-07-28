@@ -1,12 +1,26 @@
-import React, { useState } from "react"
+import React, { useState, useReducer } from "react"
 import SearchForm from "./search-form"
 import SearchResults from "./search-results"
 import "../css/search.css"
 import { useJetpackSearch } from "./search/useES"
 
+const paramsReducer = (state, action) => {
+  return {
+    ...state,
+    ...action,
+    pageHandle: action.pageHandle || "",
+    dontRefetch: action.dontRefetch || false,
+  }
+}
+
 const Search = () => {
   const [visible, setVisible] = useState(false)
-  const { params, setParams, loading, error, data } = useJetpackSearch()
+  const [params, setParams] = useReducer(paramsReducer, {
+    searchTerm: "",
+    sort: "score_default",
+    pageHandle: "",
+  })
+  const searchResults = useJetpackSearch(params)
   return (
     <>
       <button
@@ -22,17 +36,13 @@ const Search = () => {
       {visible && (
         <section className="search-container">
           <SearchForm
-            loading={loading}
-            error={error}
-            data={data}
+            searchResults={searchResults}
             {...params}
             setParams={setParams}
           />
           <SearchResults
             {...params}
-            loading={loading}
-            error={error}
-            data={data}
+            searchResults={searchResults}
             setParams={setParams}
           />
           <button
