@@ -8,7 +8,7 @@
   right: 0;
   z-index: 100;
   padding: 0.5rem 0.5rem 0.5rem 1rem;
-  width: min(65%, 24rem);
+  width: min(70%, 24rem);
 }
 .search-open-button {
   color: inherit;

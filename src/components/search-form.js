@@ -35,6 +35,7 @@ const SearchForm = ({ searchResults, searchTerm, sort, setParams }) => {
         onChange={e => setParams({ searchTerm: e.target.value })}
         placeholder="Search..."
         autoComplete="off"
+        autoCapitalize="none"
       />
       <div>
         {sortChoices.map(({ key, label }) => {
