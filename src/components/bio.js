@@ -24,7 +24,8 @@ const Bio = () => {
         <span role="img" aria-lable="magnifying glass">
           🔎.
         </span>
-        Search results are provided by <a>Jetpack Search.</a>
+        Search results are provided by{" "}
+        <a href="https://jetpack.com/support/search/">Jetpack Search.</a>
       </p>
     </div>
   )
