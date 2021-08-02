@@ -20,8 +20,8 @@ const Bio = () => {
         <a href="https://github.com/gatsbyjs/gatsby-starter-wordpress-blog">
           gatsby-starter-wordpress-blog.
         </a>{" "}
-        It comes with support for <strong>search functionality.</strong>
-        Search results are provided by{" "}
+        It comes with support for <strong>search functionality. </strong> Search
+        results come from{" "}
         <a href="https://jetpack.com/support/search/">Jetpack Search.</a>
       </p>
     </div>
