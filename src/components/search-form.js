@@ -34,7 +34,6 @@ const SearchForm = ({ searchResults, searchTerm, sort, setParams }) => {
         value={searchTerm}
         onChange={e => setParams({ searchTerm: e.target.value })}
         placeholder="Search..."
-        autoFocus
         autoComplete="off"
       />
       <div>
