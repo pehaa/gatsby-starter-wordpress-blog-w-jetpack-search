@@ -22,9 +22,9 @@ const Bio = () => {
         </a>{" "}
         It comes with support for <strong>search functionality</strong>{" "}
         <span role="img" aria-lable="magnifying glass">
-          🔎
+          🔎.
         </span>
-        . Search results are provided by <a>Jetpack Search.</a>
+        Search results are provided by <a>Jetpack Search.</a>
       </p>
     </div>
   )

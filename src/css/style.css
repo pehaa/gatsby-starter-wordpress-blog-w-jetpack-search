@@ -356,3 +356,7 @@ a:focus {
   background: #eaeef1;
   padding: 1.5rem;
 }
+
+.new-bio p {
+  margin: 0;
+}

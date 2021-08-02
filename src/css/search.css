@@ -78,7 +78,7 @@
   outline-offset: -6px;
   margin-top: 0.5rem;
   overflow-y: auto;
-  max-height: calc(100vh - 14rem);
+  max-height: calc(100vh - 15rem);
 }
 .search-results ul {
   list-style: none;
@@ -129,8 +129,9 @@
 .search-container label {
   font-family: Montserrat;
   margin-bottom: 0.5rem;
-  margin-right: 1rem;
+  margin-right: 0.5rem;
   font-weight: bold;
+  display: inline-block;
 }
 .search-container ::-webkit-search-cancel-button {
   /* Remove default */
