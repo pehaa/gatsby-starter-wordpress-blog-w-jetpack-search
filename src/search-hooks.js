@@ -3,8 +3,8 @@ import { useStaticQuery, graphql } from "gatsby"
 import AwesomeDebouncePromise from "awesome-debounce-promise"
 import { searchFunction, sortFunction } from "./utils"
 
-const serviceUrl =
-  "https://public-api.wordpress.com/rest/v1.3/sites/194959051/search?filter[bool][must][0][term][post_type]=post&size=3&highlight_fields[0]=title&highlight_fields[1]=content"
+const TIME_INTERVAL = 300
+const serviceUrl = `https://public-api.wordpress.com/rest/v1.3/sites/${process.env.GATSBY_JETPACK_BLOG_ID}/search?filter[bool][must][0][term][post_type]=post&size=10&highlight_fields[0]=title&highlight_fields[1]=content`
 
 const reducer = (state, action) => {
   switch (action.type) {
@@ -58,7 +58,7 @@ const useDebouncedSearch = params => {
     error: null,
     data: {},
   })
-  const cached = useRef(AwesomeDebouncePromise(searchFunction, 200))
+  const cached = useRef(AwesomeDebouncePromise(searchFunction, TIME_INTERVAL))
 
   useEffect(() => {
     dispatch({ type: "FETCH_INIT" })
@@ -111,8 +111,8 @@ export const useJetpackSearch = params => {
           id
           databaseId
           uri
-          title
           excerpt
+          title
         }
       }
     }

@@ -333,3 +333,26 @@ a:focus {
     list-style-position: inside;
   }
 }
+
+.wp-block-cover__image-background {
+  position: absolute !important;
+  top: 0;
+  bottom: 0;
+}
+
+.blocks-gallery-grid {
+  max-width: 100%;
+}
+
+.wp-block-gallery.is-cropped .inline-gatsby-image-wrapper {
+  height: 100%;
+}
+
+[itemprop="articleBody"] {
+  overflow: hidden;
+}
+
+.new-bio {
+  background: #eaeef1;
+  padding: 1.5rem;
+}

@@ -53,7 +53,6 @@ const SearchResults = ({ searchResults, searchTerm, setParams }) => {
             })}
           </ul>
         )}
-        {/*loading && <p>Searching posts...</p> */}
         {data.page_handle && (
           <button
             type="button"
@@ -64,7 +63,7 @@ const SearchResults = ({ searchResults, searchTerm, setParams }) => {
               })
             }
           >
-            load more
+            {loading ? "loading..." : "load more"}
           </button>
         )}
       </section>

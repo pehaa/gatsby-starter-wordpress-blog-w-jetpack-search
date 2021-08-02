@@ -2,13 +2,14 @@ import React, { useState, useReducer } from "react"
 import SearchForm from "./search-form"
 import SearchResults from "./search-results"
 import "../css/search.css"
-import { useJetpackSearch } from "./search/useES"
+import { useJetpackSearch } from "../search-hooks"
 
 const paramsReducer = (state, action) => {
   return {
     ...state,
     ...action,
     pageHandle: action.pageHandle || "",
+    // when sort changes but all results are already loaded
     dontRefetch: action.dontRefetch || false,
   }
 }

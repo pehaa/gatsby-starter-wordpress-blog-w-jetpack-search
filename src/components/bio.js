@@ -9,44 +9,23 @@ import React from "react"
 import { useStaticQuery, graphql } from "gatsby"
 
 const Bio = () => {
-  const { author } = useStaticQuery(graphql`
-    query BioQuery {
-      # if there was more than one user, this would need to be filtered
-      author: wpUser {
-        firstName
-        twitter: name
-        description
-        avatar {
-          url
-        }
-      }
-    }
-  `)
-
-  const avatarUrl = author?.avatar?.url
-
   return (
-    <div className="bio">
-      {avatarUrl && (
-        <img
-          alt={author?.firstName || ``}
-          className="bio-avatar"
-          src={avatarUrl}
-        />
-      )}
-      {author?.firstName && (
-        <p>
-          Written by <strong>{author.firstName}</strong>
-          {` `}
-          {author?.description || null}
-          {` `}
-          {author?.twitter && (
-            <a href={`https://twitter.com/${author?.twitter || ``}`}>
-              You should follow them on Twitter
-            </a>
-          )}
-        </p>
-      )}
+    <div className="new-bio">
+      <p>
+        This is{" "}
+        <a href="https://github.com/pehaa/pehaa-gatsby-starter-wordpress-blog-w-jetpack-search">
+          a fork
+        </a>{" "}
+        of the{" "}
+        <a href="https://github.com/gatsbyjs/gatsby-starter-wordpress-blog">
+          gatsby-starter-wordpress-blog.
+        </a>{" "}
+        It comes with support for <strong>search functionality</strong>{" "}
+        <span role="img" aria-lable="magnifying glass">
+          🔎
+        </span>
+        . Search results are provided by <a>Jetpack Search.</a>
+      </p>
     </div>
   )
 }

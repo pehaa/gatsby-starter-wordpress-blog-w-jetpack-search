@@ -78,7 +78,7 @@
   outline-offset: -6px;
   margin-top: 0.5rem;
   overflow-y: auto;
-  max-height: calc(100vh - 10rem);
+  max-height: calc(100vh - 14rem);
 }
 .search-results ul {
   list-style: none;

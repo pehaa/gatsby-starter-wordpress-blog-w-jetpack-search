@@ -5,7 +5,7 @@
  * https://www.gatsbyjs.com/docs/gatsby-config/
  *
  */
-
+require("dotenv").config()
 module.exports = {
   /**
    * Adding plugins to this array adds them to your Gatsby site.
@@ -26,7 +26,7 @@ module.exports = {
       resolve: `gatsby-source-wordpress`,
       options: {
         // the only required plugin option for WordPress is the GraphQL url.
-        url: `https://pehaa.xyz/five-boots/graphql`,
+        url: process.env.WPGRAPHQL_URL,
         schema: {
           timeout: 100000,
         },
