@@ -16,10 +16,10 @@ Start by installing all dependencies
 yarn
 ```
 
-Rename `env.example` to `.env` and provide your graphql endpoint and Jetpack blog id
+Rename `env.example` to `.env` and provide your **graphql endpoint** and **Jetpack site ID**
 
 ```
-mv .env.example .env
+mv .env-sample .env
 ```
 
 Run
