@@ -33,7 +33,7 @@ const SearchForm = ({ searchResults, searchTerm, sort, setParams }) => {
         type="search"
         value={searchTerm}
         onChange={e => setParams({ searchTerm: e.target.value })}
-        placeholder="Search..."
+        placeholder="ex. gallery"
         autoComplete="off"
         autoCapitalize="none"
       />
