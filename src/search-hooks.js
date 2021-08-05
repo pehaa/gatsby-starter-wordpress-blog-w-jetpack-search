@@ -118,7 +118,6 @@ export const useJetpackSearch = params => {
     }
   `)
   const { loading, error, data } = useDebouncedSearch(params)
-  console.log(loading, error, data)
   return {
     loading,
     error,
